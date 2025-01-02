@@ -25,38 +25,38 @@ This program implements a smart Sudoku solver that uses various CSP techniques t
 
 ### Main Components
 - **Backtracking with conflict-directed backjumping**: 
- - Base solver component 
- - More intelligent than simple backtracking which just backs up to the previous assignment
- - Keeps track of which variables caused each conflict using conflict sets
- - When failure is found, it can jump back multiple levels to the most recent variable that actually contributed to the failure
- - Example: If placing a 5 in cell (4,4) leads to a conflict in row 8, we can jump back to the last assignment we made in row 8, skipping any other assignments in between
- - Avoids wasting time exploring parts of the search space that won't fix the actual problem
+    - Base solver component 
+    - More intelligent than simple backtracking which just backs up to the previous assignment
+    - Keeps track of which variables caused each conflict using conflict sets
+    - When failure is found, it can jump back multiple levels to the most recent variable that actually contributed to the failure
+    - Example: If placing a 5 in cell (4,4) leads to a conflict in row 8, we can jump back to the last assignment we made in row 8, skipping any other assignments in between
+    - Avoids wasting time exploring parts of the search space that won't fix the actual problem
 
 ### Added Optimization Techniques
 - **MRV (Minimum Remaining Values)**:
- - Chooses which CELL to fill next by selecting the one with the fewest valid values in its domain (here, "domains" are, for any empty cell in the puzzle, the remaining set of valid values that could possibly go in that cell based on current constraints — this gets reduced as we make assignments to other cells and apply constraints)
- - I chose this over the degree heuristic because in Sudoku every empty cell has the same degree
- - MRV is effective since it focuses in on the most constrained cells
+    - Chooses which CELL to fill next by selecting the one with the fewest valid values in its domain (here, "domains" are, for any empty cell in the puzzle, the remaining set of valid values that could possibly go in that cell based on current constraints — this gets reduced as we make assignments to other cells and apply constraints)
+    - I chose this over the degree heuristic because in Sudoku every empty cell has the same degree
+    - MRV is effective since it focuses in on the most constrained cells
 
 - **Forward checking**:
- - Immediately updates domains of related cells after each assignment
- - Catches failures early by checking if any cell runs out of valid options
- - Helps prevent running into dead ends
+    - Immediately updates domains of related cells after each assignment
+    - Catches failures early by checking if any cell runs out of valid options
+    - Helps prevent running into dead ends
 
 - **AC-3 (Arc Consistency)**:
- - This technique maintains "arc consistency" between pairs of variables
- - Arc consistency can be defined as follows: an arc, or edge (X→Y), is consistent if for every value in X's domain, there exists at least one value in Y's domain that satisfies the constraint between X and Y
- - In oher words: for each cell X, and each number that could go in X, there must be at least one legal number for each cell Y that doesn't conflict with X
- - Example: if cells X and Y are in the same row and X can only be {1,2}, then:
-   * For value 1 in X: Y must have some value other than 1 available
-   * For value 2 in X: Y must have some value other than 2 available
-   * If either condition fails, that value can be removed from X's domain
- - This is often more effective than forward checking alone because forward checking only looks at direct conflicts, while AC-3 looks forward through the possible chain of conflicts in related cells and thus can identify problems earlier on
+    - This technique maintains "arc consistency" between pairs of variables
+    - Arc consistency can be defined as follows: an arc, or edge (X→Y), is consistent if for every value in X's domain, there exists at least one value in Y's domain that satisfies the constraint between X and Y
+    - In oher words: for each cell X, and each number that could go in X, there must be at least one legal number for each cell Y that doesn't conflict with X
+    - Example: if cells X and Y are in the same row and X can only be {1,2}, then:
+      * For value 1 in X: Y must have some value other than 1 available
+      * For value 2 in X: Y must have some value other than 2 available
+      * If either condition fails, that value can be removed from X's domain
+    - This is often more effective than forward checking alone because forward checking only looks at direct conflicts, while AC-3 looks forward through the possible chain of conflicts in related cells and thus can identify problems earlier on
 
 - **LCV (Least Constraining Value)**:
- - Chooses which VALUE to try first in a cell (I capitalize value here to emphasize how what LCV does is different than MRV)
- - Tries values that restrict other cells the *least*
- - Keeps options open in remaining empty cells
+    - Chooses which VALUE to try first in a cell (I capitalize value here to emphasize how what LCV does is different than MRV)
+    - Tries values that restrict other cells the *least*
+    - Keeps options open in remaining empty cells
 
 ## Notes
 
