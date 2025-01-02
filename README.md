@@ -1,4 +1,4 @@
-# Sodoku-Solver Constraint Satisfaction Problems
+# Sodoku-Solver Constraint Satisfaction Problem
 
 ## Introduction
 This project implements a Sudoku puzzle solver using a Constraint Satisfaction Problem (CSP) approach. It can be applied to 2 different puzzles, an "easy" puzzle (easy_sudoku.txt) and a "hard" puzzle (hard_sudoku.txt) (you could also add your own puzzle to the "puzzles" folder and alter the solver to be able to run on this, if desired). Traditional Sudoku is a 9x9 puzzle grid of 3x3 regions or "boxes." Each region, row, and column contains 9 cells. The numbers shown in the initial un-solved easy and hard sudoku boards are fixed and cannot be changed — it is only the remaining empty spaces (signified by 0s) that will be filled in. The object of the puzzle is to place the numbers 1 to 9 in the emtpy cells so that each row, columns, and 3x3 region contains the same number only once. 
